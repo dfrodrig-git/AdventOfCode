@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
 
-testRun = True
+testRun = False
 
 def assertExpected( result, expected,part=1):
     logger.info(f'Result part:{part}: {result}, expected: {expected}')
@@ -15,7 +15,7 @@ def assertExpected( result, expected,part=1):
         logger.critical("Unnaceptable!")
 
 
-def getInput(test = True, day = None) :
+def getInput(test = True, day = 3) :
     if testRun or test :
         f=open(f'inputDay{day}Test.txt')
     else :
@@ -25,21 +25,29 @@ def getInput(test = True, day = None) :
     #strip/split
     ''' 
     lines = [line.strip() for line in f]
-    data = [x.split("-") for x in lines]
+    data = [list(map(int,x)) for x in lines]
 
     return data
 
-    ''' 
-    # regex
-    ''' 
-    data = f.read()
-    p = re.compile()
 
-    return p.findall(data)
+def findJoltage(array) :
+    greaterFirstNumber = max(array[:-1])
+    
+    firstIndex = array[:-1].index(greaterFirstNumber)
+
+    greaterSecondNumber = max(array[firstIndex+1:])
+
+    #logger.info(f'{array}: max:{greaterFirstNumber}, indexOf:{firstIndex}, secondGreater: {array[firstIndex:]}, {greaterSecondNumber}')
+
+    
+    return greaterFirstNumber*10+greaterSecondNumber    
+    
+
 
 def processDataPart1(data) :
-    pass
-
+    result = sum(map(findJoltage, data))
+    
+    return result
 
 def processDataPart2(data) :
     pass
@@ -49,12 +57,12 @@ def processDataPart2(data) :
 #do stuff
 data = getInput(testRun) 
 
-result = processDataPart1() 
+result = processDataPart1(data) 
 
-assertExpected(result, None)
+assertExpected(result, 357)
 
 #Part 2
-result2 = processDataPart2() 
+result2 = processDataPart2(data) 
 
 assertExpected(result2, None, part=2)
 
